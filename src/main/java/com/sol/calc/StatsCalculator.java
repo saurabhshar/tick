@@ -24,12 +24,9 @@ public class StatsCalculator implements StatsCalc {
 	@Override
 	public void calculate() {
 		long start = (System.currentTimeMillis() - Constants.TICK_LIFE) * collisionSize;
-		long startedAT = System.currentTimeMillis();
 		clearWindow(start);
 		Stats stats = calculateForSnapshot(snapshotWindow(start));
 		statsRef.set(stats);
-		System.out.println("Finished! Time(ms) taken: " + (System.currentTimeMillis() - startedAT)
-				+ " ms. Collision was- " + collisionSize);
 	}
 
 	@Override
