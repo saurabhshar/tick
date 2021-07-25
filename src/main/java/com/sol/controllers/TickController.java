@@ -28,15 +28,17 @@ public class TickController {
 
 	@PostMapping(path = "/tick", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<String> consume(@RequestBody Tick tick) {
-		long start = System.currentTimeMillis();
-		boolean validTime = validatorService.validateTimeStamp(tick, start);
-		if (!validTime) // ****fix this ..instead of boolean, validation itself can create and send
-						// response.
+		long now = System.currentTimeMillis();
+		boolean validTime = validatorService.validateTimeStamp(tick, now);
+		if (!validTime) {
 			return ResponseEntity.status(204).build();
-		validatorService.validateStructure(tick);
+		}
+		boolean validSchema = validatorService.validateRequestSchema(tick);
+		if (!validSchema) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 		tickService.add(tick);
 		return ResponseEntity.status(201).build();
-		// **** also, add check to see all fields are ok else send back bad msg error
 	}
 
 }

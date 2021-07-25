@@ -1,62 +1,26 @@
 package com.sol.work;
 
-import java.util.DoubleSummaryStatistics;
-import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicReference;
 
-import com.sol.utils.Constants;
+import com.sol.calc.StatsCalc;
+import com.sol.calc.StatsCalculator;
 import com.sol.vo.Stats;
 import com.sol.vo.Tick;
 
 public class SlidingWindow {
 
-	ConcurrentSkipListMap<Long, Tick> tickWindow = new ConcurrentSkipListMap<>();
-
-	private Stats stats;
-
-	public SlidingWindow() {
-	}
+	private final ConcurrentSkipListMap<Long, Double> tickWindow = new ConcurrentSkipListMap<>();
+	private final AtomicReference<Stats> statsRef = new AtomicReference<>();
+	private final StatsCalc calculator = new StatsCalculator(tickWindow, statsRef, 1);// **** not SOLID
 
 	public SlidingWindow addToQueue(Tick tick) {
-
-		if (liveableTick(tick)) {
-			tickWindow.put(tick.getTimestamp(), tick);
-		}
-		stats = reCalculateStats();
-		// *** should we throw 204 otherwise?
+		tickWindow.put(tick.getTimestamp(), tick.getPrice());
 		return this;
 	}
 
-	ConcurrentNavigableMap<Long, Tick> getAllTicksInWindow() {
-		long start = System.currentTimeMillis() - Constants.TICK_LIFE;
-		return tickWindow.tailMap(start);
-	}
-
-	private boolean liveableTick(Tick tick) {
-		return tick.getTimestamp() > (System.currentTimeMillis() - Constants.TICK_LIFE);
-	}
-
-	private Stats reCalculateStats() {
-		// Move this method to a strategy class ****
-		ConcurrentNavigableMap<Long, Tick> allTicksInCurrentWindow = getAllTicksInWindow();
-		DoubleSummaryStatistics statistics = allTicksInCurrentWindow.values().stream().mapToDouble(n -> n.getPrice())
-				.summaryStatistics();
-		Stats currentStats = new Stats(statistics.getAverage(), statistics.getMax(), statistics.getMin(),
-				statistics.getCount());
-		// **** thousands of objects being recreated every second!!!!!!!
-		clear();
-		return currentStats;
-	}
-
 	public Stats getStats() {
-		if (stats == null) {
-			throw new RuntimeException("Not enough ticks received to generate stats yet!!");
-		}
-		return stats;
-	}
-
-	private void clear() {
-		long windowStartTime = System.currentTimeMillis() - Constants.TICK_LIFE;
-		tickWindow.headMap(windowStartTime).clear();
+		calculator.calculate();
+		return statsRef.get();
 	}
 }

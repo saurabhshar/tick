@@ -7,7 +7,7 @@ import com.sol.vo.Tick;
 @Service
 public interface TickValidatorService {
 
-	public boolean validateTimeStamp(Tick tick, long start);
+	public boolean validateTimeStamp(Tick tick, long now);
 
-	public boolean validateStructure(Tick tick);
+	public boolean validateRequestSchema(Tick tick);
 }

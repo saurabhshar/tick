@@ -2,5 +2,9 @@ package com.sol.utils;
 
 public class Constants {
 
-	public static int TICK_LIFE = 5000;
+	private Constants() {
+	}
+
+	public static final int TICK_LIFE = 60000;
+	public static final int COLLISION_SIZE = 1000;
 }

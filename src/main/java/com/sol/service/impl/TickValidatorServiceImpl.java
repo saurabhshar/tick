@@ -10,18 +10,14 @@ import com.sol.vo.Tick;
 public class TickValidatorServiceImpl implements TickValidatorService {
 
 	@Override
-	public boolean validateTimeStamp(Tick tick, long start) {
-		if (start > (tick.getTimestamp() + Constants.TICK_LIFE)) {
-			return false;
-		}
-		return true;
+	public boolean validateTimeStamp(Tick tick, long now) {
+		return tick.getTimestamp() > (now - Constants.TICK_LIFE);
 	}
-	
+
 	@Override
-	public boolean validateStructure(Tick tick) {
-		// TODO Auto-generated method stub // ****
-		// This one returns bad message structure if validation fails.
-		return false;
+	public boolean validateRequestSchema(Tick tick) {
+		return !(tick.getInstrument() == null || "".equals(tick.getInstrument()) || tick.getPrice() <= 0
+				|| Double.isNaN(tick.getPrice()) || (tick.getTimestamp() <= 0));
 	}
 
 }
