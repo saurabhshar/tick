@@ -1,4 +1,5 @@
 o How to run the project (preferably with maven Spring Boot plugin or alike, or as an xecutable jar)
+
 As its a Spring Boot project, run below command from project directory  -
 ./mvnw spring-boot:run
 
@@ -23,4 +24,6 @@ o What would you improve if you had more time
 - As the number of ticks grow, we might think of scaling it with distributed system, considering an intermediate datastore/cache might help in that case.
 - Deleting the ticks could be a loss, it could be send to another feed for further analytics or periodically snapped for future use.,
 
-o And, whether you liked the challenge or not - Absolutely liked working on this. I'm eager to discuss this further in coming rounds.
+o And, whether you liked the challenge or not - 
+
+Absolutely liked working on this. I'm eager to discuss this further in coming rounds.
