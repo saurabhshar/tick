@@ -7,9 +7,6 @@ public class Stats {
 	private double min;
 	private long count;
 
-	public Stats() {
-	}
-
 	public Stats(double avg, double max, double min, long count) {
 		this.avg = avg;
 		this.max = max;

@@ -23,7 +23,6 @@ public class StatisticsController {
 
 	@GetMapping(path = "/statistics/{instrument_identifier}", produces = "application/json")
 	public ResponseEntity<Stats> getStatsForInstrument(@PathVariable String instrument_identifier) {
-		// **** what if queried for wrong id or id doesnt exist.
 		return ResponseEntity.ok(tickService.getStats(instrument_identifier));
 	}
 

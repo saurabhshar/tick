@@ -12,7 +12,7 @@ public class SlidingWindow {
 
 	private final ConcurrentSkipListMap<Long, Double> tickWindow = new ConcurrentSkipListMap<>();
 	private final AtomicReference<Stats> statsRef = new AtomicReference<>();
-	private final StatsCalc calculator = new StatsCalculator(tickWindow, statsRef, 1);// **** not SOLID
+	private final StatsCalc calculator = new StatsCalculator(tickWindow, statsRef, 1);
 
 	public SlidingWindow addToQueue(Tick tick) {
 		tickWindow.put(tick.getTimestamp(), tick.getPrice());

@@ -27,14 +27,12 @@ public class TickServiceImpl implements TickService {
 	private final ConcurrentHashMap<String, SlidingWindow> instrumentsWindows = new ConcurrentHashMap<>();
 
 	public TickServiceImpl() {
-		StatsCalc calculator = new StatsCalculator(allTickPrices, allStatsRef, Constants.COLLISION_SIZE);// **** not SOLID
-		// PEr tick stats generation is very expensive for ALL ticks(~50K per sec). So,
-		// instead scheduled it now to generate 1 stat per sec, which is also eventually
-		// consistent.
+		StatsCalc calculator = new StatsCalculator(allTickPrices, allStatsRef, Constants.COLLISION_SIZE);
 		allStatsCalcScheduler.scheduleAtFixedRate(calculator, 0, 1, TimeUnit.SECONDS);
 	}
 
 	public void add(Tick tick) {
+		addWithUniqueTickTime(tick.getTimestamp(), tick.getPrice());
 		
 		String instrument = tick.getInstrument();
 		SlidingWindow window = null;
@@ -44,14 +42,11 @@ public class TickServiceImpl implements TickService {
 		}
 		instrumentsWindows.merge(instrument, window, (w, t) -> w.addToQueue(tick));
 		
-		// ---
-		addWithUniqueTickTime(tick.getTimestamp(), tick.getPrice());
-		
 	}
 
 	/*
 	 * Takes care of collision, and always generates a unique key for map - This is
-	 * only for all ticks, for individual instruement this is not
+	 * only for all ticks, for individual instrument this is not
 	 * possible(assumption - per second tick generation, but could be implemented if
 	 * generation is fast)
 	 */
