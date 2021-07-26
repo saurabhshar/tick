@@ -23,4 +23,9 @@ public class SlidingWindow {
 		calculator.calculate();
 		return statsRef.get();
 	}
+	
+	public int getTickWindowsSize() {
+		return tickWindow.size();
+	}
+	
 }

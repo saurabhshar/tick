@@ -53,9 +53,6 @@ public class TickControllerTest {
 				.content("{\"instrument\": \"IBM\",\"timestamp\": " + now + ", \"price\": 100}"))
 				.andExpect(status().is(201));
 
-		mockMvc.perform(get("/statistics/GOOGLE")).andExpect(status().isOk())
-				.andExpect(content().json("{\"avg\":0.0,\"max\":0.0,\"min\":0.0,\"count\":0}"));
-
 		mockMvc.perform(post("/tick").contentType(MediaType.APPLICATION_JSON)
 				.content("{\"instrument\": \"APPLE\",\"timestamp\": " + (now + 50) + ", \"price\": 200}"))
 				.andExpect(status().is(201));
@@ -70,23 +67,6 @@ public class TickControllerTest {
 				.andExpect(content().json("{\"avg\":200.0,\"max\":300.0,\"min\":100.0,\"count\":2}"));
 	}
 
-	/*@Test
-	public void testMultipleConsumeTicksGetStats() throws Exception {
-		long now = System.currentTimeMillis();
-		
-		String[] prices = allPrices.split(",");
-
-		for (int i = 0; i < 100; i++) {
-			long ts = now + i;
-			double price = Double.valueOf(prices[i]);
-			mockMvc.perform(post("/tick").contentType(MediaType.APPLICATION_JSON)
-					.content("{\"instrument\": \"MULTI_TEST\",\"timestamp\": " + ts + ", \"price\": " + price + "}"))
-					.andExpect(status().is(201));
-		}
-		mockMvc.perform(get("/statistics/MULTI_TEST")).andExpect(status().isOk()).andExpect(content().json(
-				"{\"avg\":104.94768899754585,\"max\":109.68332784179027,\"min\":100.12480977012429,\"count\":100}"));
-	}
-*/
 	@Test
 	public void testMultipleConsumeTicksGetStatsThreaded() throws Exception {
 		long now = System.currentTimeMillis();

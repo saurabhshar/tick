@@ -38,29 +38,26 @@ public class SlidingWindowTest {
 		sw.addToQueue(t5);
 		t5.setInstrument("five");
 
-		// assertTrue(sw.tickWindow.size() == 4);
-		// assertTrue(sw.getAllTicksInWindow().firstKey() == now - 200);
-
 		Tick t6 = new Tick();
 		t6.setTimestamp(now - Constants.TICK_LIFE + 50);
 		sw.addToQueue(t6);
 		t6.setInstrument("six");
-		// assertTrue(sw.tickWindow.size() == 5);
+		assertTrue(sw.getTickWindowsSize() == 5);
 
 		try {
 			Thread.sleep(50);
 		} catch (InterruptedException e) {
 		}
-		// assertTrue(sw.tickWindow.size() == 5);
-		
+		assertTrue(sw.getTickWindowsSize() == 5);
+
 		Tick t7 = new Tick();
-		t7.setTimestamp(now+10);
+		t7.setTimestamp(now + 10);
 		sw.addToQueue(t7);
 		t7.setInstrument("seven");
-		
-		// assertTrue(sw.tickWindow.size() == 5);//3274
-		
-		// System.out.println(sw.tickWindow);
+
+		assertTrue(sw.getTickWindowsSize() == 5);// 3274
+
+		System.out.println(sw.getTickWindowsSize());
 		System.out.println(sw.getStats());
 	}
 }
