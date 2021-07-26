@@ -27,12 +27,8 @@ public class StatsWorker implements Runnable {
 
 	private void addForSingleInstrument(Tick tick) {
 		String instrument = tick.getInstrument();
-		SlidingWindow window = null;
-		if (!instrumentsWindows.containsKey(instrument)) {
-			window = new SlidingWindow();
-			window.addToQueue(tick);
-		}
-		instrumentsWindows.merge(instrument, window, (w, t) -> w.addToQueue(tick));
+		instrumentsWindows.compute(instrument,
+				(k, v) -> v == null ? new SlidingWindow().addToQueue(tick) : v.addToQueue(tick));
 	}
 
 	/*
