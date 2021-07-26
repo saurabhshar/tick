@@ -42,7 +42,7 @@ public class SlidingWindowTest {
 		t6.setTimestamp(now - Constants.TICK_LIFE + 50);
 		sw.addToQueue(t6);
 		t6.setInstrument("six");
-		assertTrue(sw.getTickWindowsSize() == 5);
+		assertTrue(sw.getTickWindowsSize() == 6);
 
 		try {
 			Thread.sleep(50);
