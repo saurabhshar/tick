@@ -5,7 +5,9 @@ As its a Spring Boot project, run below command from project directory  -
 
 I've configured the service at port:9080, it could be configured in env. specific property file. So, services will be accessible at -
 http://localhost:9080/tick
+
 http://localhost:9080/statistics
+
 http://localhost:9080/statistics/{instrument_identifier}
 
 o Which assumptions you made while developing - 
