@@ -25,6 +25,7 @@ o What would you improve if you had more time
 - As the number of ticks grow, we might think of scaling it with distributed system, considering an intermediate datastore/cache might help in that case.
 - Deleting the ticks could be a loss, it could be send to another feed for further analytics or periodically snapped for future use.
 - Separate command and query services to scale.
+- There seems to be an issue with jmelody jars and junit conflicting - I had to remove jmelody for some time, however this needs to be checked and fixed.
 
 o And, whether you liked the challenge or not - 
 
