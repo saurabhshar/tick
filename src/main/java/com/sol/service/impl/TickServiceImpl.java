@@ -3,7 +3,6 @@ package com.sol.service.impl;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Service;
@@ -28,6 +27,5 @@ public class TickServiceImpl implements TickService {
 	public void add(Tick tick) {
 		TickWorker worker = new TickWorker(tick);
 		executor.submit(worker);
-		System.out.println(((ThreadPoolExecutor )executor).getQueue().size());
 	}
 }
