@@ -18,9 +18,9 @@ public class TickServiceImpl implements TickService {
 
 	private final ScheduledExecutorService allStatsCalcScheduler = Executors.newScheduledThreadPool(1);
 	private final ExecutorService executor = Executors.newFixedThreadPool(10);
+	private final StatsCalc calculator = new CollisionStatsCalculator();
 
 	public TickServiceImpl() {
-		StatsCalc calculator = new CollisionStatsCalculator();
 		allStatsCalcScheduler.scheduleAtFixedRate(calculator, 0, 1, TimeUnit.SECONDS);
 	}
 
