@@ -2,9 +2,9 @@ package com.sol.vo;
 
 public class Tick {
 
-	String instrument;
-	double price;
-	long timestamp;
+	private String instrument;
+	private double price;
+	private long timestamp;
 
 	public Tick() {
 	}

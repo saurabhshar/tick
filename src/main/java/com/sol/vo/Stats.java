@@ -2,10 +2,10 @@ package com.sol.vo;
 
 public class Stats {
 
-	private double avg;
-	private double max;
-	private double min;
-	private long count;
+	private final double avg;
+	private final double max;
+	private final double min;
+	private final long count;
 
 	public Stats(double avg, double max, double min, long count) {
 		this.avg = avg;
@@ -20,10 +20,6 @@ public class Stats {
 
 	public double getMax() {
 		return max;
-	}
-
-	public void setMax(double max) {
-		this.max = max;
 	}
 
 	public double getMin() {

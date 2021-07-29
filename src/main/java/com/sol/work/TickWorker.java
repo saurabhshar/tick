@@ -1,22 +1,15 @@
 package com.sol.work;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-
+import com.sol.store.TickStore;
 import com.sol.utils.Constants;
 import com.sol.vo.Tick;
 
-public class StatsWorker implements Runnable {
+public class TickWorker implements Runnable {
 
 	private final Tick tick;
-	private final ConcurrentHashMap<String, SlidingWindow> instrumentsWindows;
-	private final ConcurrentSkipListMap<Long, Double> allTickPrices;
 
-	public StatsWorker(Tick tick, ConcurrentHashMap<String, SlidingWindow> instrumentsWindows,
-			ConcurrentSkipListMap<Long, Double> allTickPrices) {
+	public TickWorker(Tick tick) {
 		this.tick = tick;
-		this.instrumentsWindows = instrumentsWindows;
-		this.allTickPrices = allTickPrices;
 	}
 
 	@Override
@@ -27,7 +20,7 @@ public class StatsWorker implements Runnable {
 
 	private void addForSingleInstrument(Tick tick) {
 		String instrument = tick.getInstrument();
-		instrumentsWindows.compute(instrument,
+		TickStore.getInstance().getInstrumentsWindows().compute(instrument,
 				(k, v) -> v == null ? new SlidingWindow().addToQueue(tick) : v.addToQueue(tick));
 	}
 
@@ -40,7 +33,7 @@ public class StatsWorker implements Runnable {
 		long index = timestamp * Constants.COLLISION_SIZE;
 		long maxblock = index + Constants.COLLISION_SIZE - 1;
 		while (true) {
-			Double val = allTickPrices.putIfAbsent(index, price);
+			Double val = TickStore.getInstance().getAllTickPrices().putIfAbsent(index, price);
 			if (val == null || index > maxblock)
 				break;
 			else {

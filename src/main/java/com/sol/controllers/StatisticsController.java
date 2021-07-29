@@ -7,28 +7,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sol.service.TickService;
+import com.sol.service.StatisticsService;
 import com.sol.vo.Stats;
 
 @RestController
 public class StatisticsController {
 
 	@Autowired
-	TickService tickService;
+	StatisticsService statsService;
 
 	@GetMapping(path = "/stats/ping")
 	public HttpStatus ping() {
 		return HttpStatus.OK;
 	}
 
-	@GetMapping(path = "/statistics/{instrument_identifier}", produces = "application/json")
-	public ResponseEntity<Stats> getStatsForInstrument(@PathVariable String instrument_identifier) {
-		return ResponseEntity.ok(tickService.getStats(instrument_identifier));
+	@GetMapping(path = "/statistics/{instrumentIdentifier}", produces = "application/json")
+	public ResponseEntity<Stats> getStatsForInstrument(@PathVariable String instrumentIdentifier) {
+		return ResponseEntity.ok(statsService.getStats(instrumentIdentifier));
 	}
 
 	@GetMapping(path = "/statistics", produces = "application/json")
 	public ResponseEntity<Stats> getStats() {
-		return ResponseEntity.ok(tickService.getStats());
+		return ResponseEntity.ok(statsService.getStats());
 	}
 
 }

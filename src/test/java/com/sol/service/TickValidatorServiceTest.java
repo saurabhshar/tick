@@ -22,7 +22,7 @@ public class TickValidatorServiceTest {
 		tick.setTimestamp(now - Constants.TICK_LIFE - 100);
 		assertFalse(validator.validateTimeStamp(tick, now));
 	}
-	
+
 	@Test
 	public void testValidateStructure() {
 		Tick tick = new Tick();

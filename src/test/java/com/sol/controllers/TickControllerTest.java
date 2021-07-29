@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.sol.utils.Constants;
+import com.sol.vo.Tick;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -64,6 +65,57 @@ public class TickControllerTest {
 		mockMvc.perform(get("/statistics")).andExpect(status().isOk());
 
 		mockMvc.perform(get("/statistics/IBM")).andExpect(status().isOk())
+				.andExpect(content().json("{\"avg\":200.0,\"max\":300.0,\"min\":100.0,\"count\":2}"));
+	}
+
+	
+	@Test
+	public void testConsumeTicksGetStatsWithId() throws Exception {
+		long now = System.currentTimeMillis();
+		ExecutorService es = Executors.newFixedThreadPool(5);
+		for(int i=1;i<20;i++) {
+			long ts = now + i;
+			double price = i;
+			es.submit(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+					mockMvc.perform(post("/tick").contentType(MediaType.APPLICATION_JSON)
+							.content("{\"instrument\": \"IBM\",\"timestamp\": " + ts + ", \"price\":" +price + "}"))
+							.andExpect(status().is(201));
+					
+					mockMvc.perform(post("/tick").contentType(MediaType.APPLICATION_JSON)
+							.content("{\"instrument\": \"GOOG\",\"timestamp\": " + ts + ", \"price\":" +price + "}"))
+							.andExpect(status().is(201));
+					
+					mockMvc.perform(post("/tick").contentType(MediaType.APPLICATION_JSON)
+							.content("{\"instrument\": \"TCS\",\"timestamp\": " + ts + ", \"price\":" +price + "}"))
+							.andExpect(status().is(201));
+					
+					
+						mockMvc.perform(post("/tick").contentType(MediaType.APPLICATION_JSON)
+								.content("{\"instrument\": \"APPLE\",\"timestamp\": " + now + ", \"price\":" +price + "}"))
+								.andExpect(status().is(201));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+										
+				}
+			});
+			
+		}
+		
+		es.awaitTermination(5, TimeUnit.SECONDS);
+		mockMvc.perform(get("/statistics/IBM")).andExpect(status().isOk())
+		.andExpect(content().json("{\"avg\":200.0,\"max\":300.0,\"min\":100.0,\"count\":2}"));
+		mockMvc.perform(get("/statistics/GOOG")).andExpect(status().isOk())
+		.andExpect(content().json("{\"avg\":200.0,\"max\":300.0,\"min\":100.0,\"count\":2}"));
+		mockMvc.perform(get("/statistics/TCS")).andExpect(status().isOk())
+		.andExpect(content().json("{\"avg\":200.0,\"max\":300.0,\"min\":100.0,\"count\":2}"));
+
+		mockMvc.perform(get("/statistics/APPLE")).andExpect(status().isOk())
 				.andExpect(content().json("{\"avg\":200.0,\"max\":300.0,\"min\":100.0,\"count\":2}"));
 	}
 
