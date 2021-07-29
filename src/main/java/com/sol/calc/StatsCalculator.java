@@ -26,6 +26,9 @@ public class StatsCalculator implements StatsCalc {
 
 	@Override
 	public void run() {
+		/*
+		 * Doesn't need to run anything here - happens for all ticks only.
+		 */
 	}
 
 	private void clearWindow(ConcurrentSkipListMap<Long, Double> tickMap, long start) {
