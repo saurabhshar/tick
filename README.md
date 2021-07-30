@@ -19,7 +19,7 @@ o Which assumptions you made while developing -
 - Every tick event is being put into the Queue and being processed asynchronously - howver, client is returned a 201 response. Its assumed that the 'processing' of the tick does not impact the response. Also, with assumed scale as above, queue size is large enough and Tick workers are able to consume at the same rate, If required DiscardOldestPolicy could be used as well.
 - Standard library for aggregation - My assumption for this point is that its for external jars to jdk.
 - There is a chance that stats will remain same if there's no new statistics/{instrument_identifier} request coming for individual instrument. Assumption here is that the GET statitistics/{instrument_identifier} call is coming continuously from a client (another monitoring application perhaps) and the recalculation and clean up of instrument specific data structure happens when this call occurs. Since for individual instrument, growth of tick data is slow ~ a tick per second, we assume the underlying structure wouldnt grow exponentially and will be cleaned up in next statistics/id call.
-- 
+- running port is configured at 9080, and can be changed as needed.
 
 o What would you improve if you had more time
 - Statistics publishing could be improved further and instead of only scheduling /polling/pre-populating a hybrid approach can be taken to populate stats for lets say 25 ticks together or for the interval of 10ms. Also, this could be event based, so for every calculation of a tick generates an event - which will be consumed by monitor/other consumer apps for analytics.
